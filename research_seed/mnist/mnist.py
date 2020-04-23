@@ -40,6 +40,12 @@ class CoolSystem(pl.LightningModule):
         avg_loss = torch.stack([x['val_loss'] for x in outputs]).mean()
         return {'avg_val_loss': avg_loss}
 
+    def test_step(self, batch, batch_idx):
+        # OPTIONAL
+        x, y = batch
+        y_hat = self.forward(x)
+        return {'test_loss': F.cross_entropy(y_hat, y)}
+
     def configure_optimizers(self):
         # REQUIRED
         # can return multiple optimizers and learning_rate schedulers
@@ -71,4 +77,3 @@ class CoolSystem(pl.LightningModule):
         parser.add_argument('--max_nb_epochs', default=2, type=int)
 
         return parser
-
