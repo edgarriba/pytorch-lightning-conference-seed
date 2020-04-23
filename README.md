@@ -40,12 +40,28 @@ First, install dependencies
 git clone https://github.com/YourGithubName/Your-project-name   
 
 # install project   
-cd Your-project-name 
-pip install -e .   
+cd Your-project-name
+```
+Second, setup your development environment:
+
+**From Python Virtual Environments**
+```bash
+python3.6 -m venv venv  # from repo root, use python3.6+
+source venv/bin/activate
 pip install -r requirements.txt
- ```   
+```
+
+**From conda**
+
+From this project root: `./setup_dev_env.sh`
+
+Activate the conda environment: `source path.bash.inc`
+   
  Next, navigate to [Your Main Contribution (MNIST here)] and run it.   
  ```bash
+ # install the project with symbolic links
+ pip install -e .   
+
 # module folder
 cd research_seed/mnist/   
 
