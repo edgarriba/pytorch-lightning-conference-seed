@@ -2,14 +2,18 @@
 This file defines the core research contribution   
 """
 import os
+from argparse import ArgumentParser
+
 import torch
+import torch.nn as nn
 from torch.nn import functional as F
 from torch.utils.data import DataLoader
 from torchvision.datasets import MNIST
 import torchvision.transforms as transforms
-from argparse import ArgumentParser
 
 import pytorch_lightning as pl
+
+import kornia as K
 
 
 class CoolSystem(pl.LightningModule):
@@ -20,13 +24,18 @@ class CoolSystem(pl.LightningModule):
         self.hparams = hparams
         self.l1 = torch.nn.Linear(28 * 28, 10)
 
+        self.transforms = nn.Sequential(
+            K.augmentation.Normalize(0., 255.),
+        )
+
     def forward(self, x):
         return torch.relu(self.l1(x.view(x.size(0), -1)))
 
     def training_step(self, batch, batch_idx):
         # REQUIRED
         x, y = batch
-        y_hat = self.forward(x)
+        x_aug = self.transforms(x)
+        y_hat = self.forward(x_aug)
         return {'loss': F.cross_entropy(y_hat, y)}
 
     def validation_step(self, batch, batch_idx):
